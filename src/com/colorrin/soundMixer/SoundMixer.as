@@ -13,12 +13,14 @@
 	import org.bytearray.micrecorder.encoder.WaveEncoder;
 	import flash.display.Stage;
 	import flash.events.IOErrorEvent;
+	import flash.text.TextField;
 	
 	public class SoundMixer extends EventDispatcher{
 
 		static const FILE_FILTER:FileFilter = new FileFilter("Sound File", "*.mp3");
 		
 		private var _stage:Stage;
+		private var _txtTarget:TextField;
 		
 		private var _mp3Encoder:ShineMP3Encoder ;
 		
@@ -114,6 +116,7 @@
 			
 			var dataUploader:DataUploader = new DataUploader();
 			dataUploader.stage = _stage;
+			dataUploader.txtTarget = _txtTarget;
 			dataUploader.init();
 			
 			dataUploader.uploadSoundTrack(_mp3Encoder.mp3Data);
@@ -158,6 +161,10 @@
 		
 		public function set stage(value:Stage):void{
 			_stage = value;
+		}
+		
+		public function set txtTarget(value:TextField):void{
+			_txtTarget = value;
 		}
 	}
 	

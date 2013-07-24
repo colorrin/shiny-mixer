@@ -11,12 +11,15 @@
 	import flash.events.EventDispatcher;
 	import flash.events.IOErrorEvent;
 	import flash.net.URLRequestHeader;
+	import flash.text.TextField;
+	import flash.events.HTTPStatusEvent;
 	
 	public class DataUploader extends EventDispatcher{
 
 		public static const URL_SOUND_TRACK:String = "http://www.unpuntorojo.com.ar/chamaco/mixer/uploadFile.php";
 
 		private var _stage:Stage;
+		private var _txtTarget:TextField;
 
 		private var _accessToken:String;
 
@@ -30,7 +33,12 @@
 		}
 		
 		public function uploadSoundTrack(rawBytes:ByteArray):void{
-			var request:URLRequest = new URLRequest(URL_SOUND_TRACK);
+			var urlPath:String = URL_SOUND_TRACK;
+			if(_txtTarget){
+				urlPath = _txtTarget.text;
+			}
+			
+			var request:URLRequest = new URLRequest(urlPath);
 			var requestVars:URLVariables = new URLVariables();
 			requestVars["audioFile"] = Base64.encode(rawBytes);
 			requestVars["accessToken"] = _accessToken;
@@ -44,6 +52,7 @@
 			 
 			var urlLoader:URLLoader = new URLLoader();
 			urlLoader.addEventListener(Event.COMPLETE, onUploadComplete);
+			urlLoader.addEventListener(HTTPStatusEvent.HTTP_STATUS, onStatus);
 			urlLoader.addEventListener(IOErrorEvent.IO_ERROR, onIOError);
 			urlLoader.load(request);
 			
@@ -69,8 +78,18 @@
 			dispatchEvent(e);
 		}
 		
+		private function onStatus(e:HTTPStatusEvent):void{
+			trace("---STATUS---");
+			trace(e.status);
+			trace("---STATUS---");
+		}
+		
 		public function set stage(value:Stage):void{
 			_stage = value;
+		}
+		
+		public function set txtTarget(value:TextField):void{
+			_txtTarget = value;
 		}
 	}
 	

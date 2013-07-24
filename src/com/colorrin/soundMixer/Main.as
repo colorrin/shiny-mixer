@@ -8,6 +8,7 @@
 	import com.colorrin.ui.GenericList;
 	import org.audiofx.mp3.MP3SoundEvent;
 	import flash.events.IOErrorEvent;
+	import flash.text.TextField;
 	
 	public class Main extends MovieClip{
 
@@ -27,6 +28,7 @@
 		private function init():void{
 			_soundMixer = new SoundMixer();
 			_soundMixer.stage = this.stage;
+			_soundMixer.txtTarget = getChildByName("txtTarget") as TextField;
 			
 			_soundMixer.addEventListener(MP3SoundEvent.COMPLETE, onFileLoadComplete);
 			
